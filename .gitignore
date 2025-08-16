@@ -1,0 +1,6 @@
+venv
+logs
+__pycache__
+.env
+writing_prompts
+samples
