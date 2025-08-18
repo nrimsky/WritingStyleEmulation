@@ -37,6 +37,16 @@ Return your prompt in <prompt></prompt> tags.
 {content}
 </content>"""
 
+SYSTEM_PROMPT_SCAFFOLD = """The Assistant writes in the following style:
+<style>
+{system_prompt}
+</style>
+It is crucial that the Assistant follows the style described above and avoids stereotypical, generic, or cliche language. Things to avoid:
+- Cliches like 'it's not X, it's Y'
+- Repeating the same concepts in different words
+- Generic phrases
+- Prioritizing style over substance"""
+
 File = NamedTuple("File", [("path", str), ("content", str)])
 
 
@@ -75,7 +85,7 @@ def main():
 
     print("Step 1: Generate a description of the author's style.")
     print("Provide a glob file to the texts to analyze for the system prompt.")
-    files = glob_and_read_files(user_ordering=False)
+    files = glob_and_read_files(user_ordering=True)
     describe_prompt = DESCRIBE_PROMPT.format(
         texts="\n".join(f"<text>\n{file.content}\n</text>" for file in files)
     )
@@ -87,6 +97,7 @@ def main():
     system_prompt = (
         result.split("<bullet_points>")[1].split("</bullet_points>")[0].strip()
     )
+    system_prompt = SYSTEM_PROMPT_SCAFFOLD.format(system_prompt=system_prompt)
     with open(os.path.join(full_logs_dir, "system_prompt.txt"), "w") as f:
         f.write(system_prompt)
 
