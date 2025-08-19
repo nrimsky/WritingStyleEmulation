@@ -4,3 +4,4 @@ __pycache__
 .env
 writing_prompts
 samples
+.DS_Store
